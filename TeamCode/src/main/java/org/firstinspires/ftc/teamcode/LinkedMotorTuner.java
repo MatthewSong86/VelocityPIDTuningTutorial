@@ -21,7 +21,6 @@ public class LinkedMotorTuner extends LinearOpMode {
     public static double kV = 1 / TuningController.rpmToTicksPerSecond(TuningController.MOTOR_MAX_RPM);
     public static double kA = 0;
     public static double kStatic = 0;
-
     private final FtcDashboard dashboard = FtcDashboard.getInstance();
 
     private final ElapsedTime veloTimer = new ElapsedTime();
@@ -29,15 +28,15 @@ public class LinkedMotorTuner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Change my id
-        DcMotorEx myMotor1 = hardwareMap.get(DcMotorEx.class, "flywheelMotor1");
-        DcMotorEx myMotor2 = hardwareMap.get(DcMotorEx.class, "flywheelMotor2");
+        DcMotorEx flywheel = hardwareMap.get(DcMotorEx.class, "fw");
+        DcMotorEx flywheel1 = hardwareMap.get(DcMotorEx.class, "fw1");
 
         // Reverse as appropriate
         // myMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
         // myMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        myMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        myMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        flywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        flywheel1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
@@ -75,12 +74,12 @@ public class LinkedMotorTuner extends LinearOpMode {
 
             telemetry.addData("targetVelocity", targetVelo);
 
-            double motorPos = myMotor1.getCurrentPosition();
-            double motorVelo = myMotor1.getVelocity();
+            double motorPos = flywheel.getCurrentPosition();
+            double motorVelo = flywheel1.getVelocity();
 
             double power = veloController.update(motorPos, motorVelo);
-            myMotor1.setPower(power);
-            myMotor2.setPower(power);
+            flywheel.setPower(power);
+            flywheel1.setPower(power);
 
             if(lastKv != kV || lastKa != kA || lastKstatic != kStatic) {
                 lastKv = kV;
