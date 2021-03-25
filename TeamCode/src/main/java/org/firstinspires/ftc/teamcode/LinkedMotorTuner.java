@@ -75,7 +75,7 @@ public class LinkedMotorTuner extends LinearOpMode {
             telemetry.addData("targetVelocity", targetVelo);
 
             double motorPos = flywheel.getCurrentPosition();
-            double motorVelo = flywheel1.getVelocity();
+            double motorVelo = flywheel.getVelocity();
 
             double power = veloController.update(motorPos, motorVelo);
             flywheel.setPower(power);
